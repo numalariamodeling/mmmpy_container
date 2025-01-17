@@ -1,24 +1,23 @@
-
-
-# `malariasimulation` package v  2.0.1
-# https://rdrr.io/github/mrc-ide/malariasimulation/
+# Github repositories
+# malariasimulation: https://rdrr.io/github/mrc-ide/malariasimulation/ 
+# Umbrella: https://mrc-ide.github.io/umbrella/index.html
+# malariaEquilibium: https://github.com/mrc-ide/malariaEquilibrium
 
 #R packages are listed below (for R >= 4.2.3)
+# Using R v4.4.0
 
 install.packages("devtools")
 install_github('mrc-ide/malariasimulation@v2.0.1')
 devtools::install_github("mrc-ide/umbrella")
 devtools::install_github("mrc-ide/malariaEquilibrium")
 
-install.packages("tidyverse")
+# Other R packages
 install.packages("tibble")
-install.packages("lubridate")
 install.packages("dplyr")
 install.packages("readr")
 install.packages("argparser")
-install.packages("ggplot2")
 install.packages("base")
 install.packages("utils")
-install.packages("tictoc")
+
 
 
