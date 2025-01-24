@@ -7,7 +7,7 @@
 # Using R v4.4.0
 
 install.packages("devtools")
-devtools::install_github('mrc-ide/malariasimulation@v2.0.1')
+devtools::install_github('mrc-ide/malariasimulation@v2.0.0')
 devtools::install_github("mrc-ide/umbrella")
 devtools::install_github("mrc-ide/malariaEquilibrium")
 
