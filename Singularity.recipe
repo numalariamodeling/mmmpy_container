@@ -1,0 +1,94 @@
+Bootstrap: docker
+From: rockylinux/rockylinux:8
+
+%post
+
+    dnf install -y \
+        epel-release
+
+    dnf config-manager --set-enabled devel powertools
+
+    dnf makecache --refresh
+
+    dnf install -y \
+        wget \
+        curl \
+        python39-devel \
+        python39-setuptools \
+        python39-pip \
+        python38-devel \
+        python38-setuptools \
+        python38-pip \
+        boost \
+        boost-mpich \
+        gcc-c++ \
+        yaml-cpp \
+        mpich \
+        mpich-devel \
+        git \
+        xorg-x11-xauth \
+        xerces-c-devel  \
+        gsl-devel \
+        git-lfs \
+        git \
+        cmake
+
+    dnf install -y \
+        xsd \
+        zlib-devel
+
+    # Install Open Malaria 46.0
+    git clone -b schema-46.0 --single-branch https://github.com/SwissTPH/openmalaria.git /openmalaria-schema-46.0
+    mkdir /openmalaria-schema-46.0/build && cd /openmalaria-schema-46.0/build && cmake .. && cmake --build . --parallel 4
+
+    # Install Open Malaria XX.X
+    ##RUN git clone -b schema-XX.X --single-branch https://github.com/SwissTPH/openmalaria.git /openmalaria-schema-XX.X
+    ##RUN mkdir /openmalaria-schema-XX.X/build && cd /openmalaria-schema-XX.X/build && cmake .. && cmake --build . --parallel 4
+
+    wget https://raw.githubusercontent.com/numalariamodeling/mmmpy_container/refs/heads/main/requirements.emodpy_om.txt
+    #COPY requirements.dtk.txt  /requirements.dtk.txt
+
+    mkdir -p /opt/envs/
+    ## INSTALL EMODPY Environment
+    python3.8 -m venv /opt/envs/emodpy_om
+    . /opt/envs/emodpy_om/bin/activate && python -m pip install -r /requirements.emodpy_om.txt --extra-index-url=https://packages.idmod.org/api/pypi/pypi-production/simple
+
+    ## Install R
+    R_VERSION=4.4.1
+    curl -O https://cdn.rstudio.com/r/centos-8/pkgs/R-${R_VERSION}-1-1.x86_64.rpm
+    yum install -y R-${R_VERSION}-1-1.x86_64.rpm
+
+
+    ## Install DTK RUN
+    ##RUN python3.9 -m venv /opt/envs/dtk_run_py39
+    ##RUN . /opt/envs/dtk_run_py39/bin/activate && python -m pip install -r /requirements.dtk.txt --extra-index-url=https://packages.idmod.org/api/pypi/pypi-production/simple
+
+    # Set Environment Helpfully
+    PATH=/opt/R/4.4.1/bin/:$PATH
+    LD_LIBRARY_PATH=/usr/lib64/mpich/lib/
+
+    dnf install -y \
+        openssl-devel \
+        fontconfig-devel \
+        freetype-devel \
+        libpng-devel \
+        libtiff-devel \
+        libjpeg-devel \
+        libxml2-devel \
+        harfbuzz-devel \
+        fribidi-devel
+
+    ## Install R packages
+    echo 'local({r <- getOption("repos"); r["CRAN"] <- "https://cloud.r-project.org/"; options(repos = r)})' > /opt/R/4.4.1/lib/R/etc/Rprofile.site
+    wget https://raw.githubusercontent.com/numalariamodeling/mmmpy_container/refs/heads/main/requirements_R.txt
+    Rscript /requirements_R.txt
+
+%environment
+    export R_VERSION=4.4.1
+    export PATH=/opt/R/4.4.1/bin/:$PATH
+    export LD_LIBRARY_PATH=/usr/lib64/mpich/lib/
+
+%runscript
+    exec /bin/bash "$@"
+%startscript
+    exec /bin/bash "$@"
