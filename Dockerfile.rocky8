@@ -13,9 +13,6 @@ RUN dnf install -y \
     python39-devel \
     python39-setuptools \
     python39-pip \
-    python38-devel \
-    python38-setuptools \
-    python38-pip \
     boost \
     boost-mpich \
     gcc-c++ \
@@ -42,23 +39,17 @@ RUN mkdir /openmalaria-schema-46.0/build && cd /openmalaria-schema-46.0/build &&
 ##RUN git clone -b schema-XX.X --single-branch https://github.com/SwissTPH/openmalaria.git /openmalaria-schema-XX.X
 ##RUN mkdir /openmalaria-schema-XX.X/build && cd /openmalaria-schema-XX.X/build && cmake .. && cmake --build . --parallel 4
 
-RUN wget https://raw.githubusercontent.com/numalariamodeling/mmmpy_container/refs/heads/main/requirements.emodpy_om.txt
-#COPY requirements.dtk.txt  /requirements.dtk.txt
+RUN wget https://raw.githubusercontent.com/numalariamodeling/mmmpy_container/refs/heads/main/requirements.container.txt
 
 RUN mkdir -p /opt/envs/
 ## INSTALL EMODPY Environment
-RUN python3.8 -m venv /opt/envs/emodpy_om 
-RUN . /opt/envs/emodpy_om/bin/activate && python -m pip install -r /requirements.emodpy_om.txt --extra-index-url=https://packages.idmod.org/api/pypi/pypi-production/simple
+RUN python3.8 -m venv /opt/envs/mmmpy_container
+RUN . /opt/envs/mmmpy_container/bin/activate && python -m pip install -r /requirements.container.txt --extra-index-url=https://packages.idmod.org/api/pypi/pypi-production/simple
 
 ## Install R
 ENV R_VERSION=4.4.1
 RUN curl -O https://cdn.rstudio.com/r/centos-8/pkgs/R-${R_VERSION}-1-1.x86_64.rpm
 RUN yum install -y R-${R_VERSION}-1-1.x86_64.rpm
-
-
-## Install DTK RUN
-##RUN python3.9 -m venv /opt/envs/dtk_run_py39
-##RUN . /opt/envs/dtk_run_py39/bin/activate && python -m pip install -r /requirements.dtk.txt --extra-index-url=https://packages.idmod.org/api/pypi/pypi-production/simple
 
 # Set Environment Helpfully
 ENV PATH=/opt/R/4.4.1/bin/:$PATH
