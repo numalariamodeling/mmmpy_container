@@ -1,5 +1,15 @@
 FROM rockylinux/rockylinux:8
 
+# munge and slurm stuff
+ARG MUNGEUSER=493
+ARG MUNGEGROUP=493
+ARG SLURMUSER=496
+ARG SLURMGROUP=494
+RUN groupadd -f -g $SLURMGROUP slurm \
+    && useradd --no-create-home -u $SLURMUSER -g slurm  -s /bin/bash slurm
+RUN groupadd -f -g $MUNGEGROUP munge \
+    && useradd --no-create-home -u $MUNGEUSER -g munge -s /sbin/nologin munge
+    
 RUN dnf install -y \
     epel-release
 
