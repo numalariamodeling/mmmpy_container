@@ -6,6 +6,7 @@ In case of new versions for one of the three models, the container will need to 
 #### Update Docker 
 
 Steps: 
+- Save the files under `MultiMalModPy/dependencies`
 - Modify the `Dockerfile.rocky8` as needed, i.e. by updating the version to install
 - Download and install Docker from https://app.docker.com/  (requires to create an account)
 - Navigate to `MultiMalModPy/dependencies`, assuming you are already at the repository root:
